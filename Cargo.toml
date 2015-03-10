@@ -1,11 +1,8 @@
 [package]
 
-# Elision in Rust.
-name = "reli"
-
-# This project uses semantic versioning.  See:
-# http://semver.org/ for details.
+name = "eli-rust"
 version = "0.0.1"
-
-# The authors.
 authors = ["Stacy J. Prowell <sprowell@gmail.com>"]
+
+[dependencies]
+linenoise-rust = "0.1.5"
