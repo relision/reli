@@ -1,8 +1,27 @@
 [package]
-
-name = "eli-rust"
-version = "0.0.1"
-authors = ["Stacy J. Prowell <sprowell@gmail.com>"]
+	name = "relision"
+	# The relision project uses semantic versioning.
+	version = "0.0.1"
+	authors = ["The Elision Development Team"]
+	license = "BSD/2-Clause"
+	readme = "README.md"
+	repository = "https://github.com/relision/reli"
+	homepage = "https://github.com/relision/reli"
+	description = """
+The Elision term rewriter.
+"""
 
 [dependencies]
-linenoise-rust = "0.1.5"
+	# The linenoise library provides history and line parsing.
+	linenoise-rust = "~0.1.5"
+	# The num library provides arbitrary precision integers.
+	num = "~0.1.15"
+	# The getopts library provides simple command line parsing.
+	getopts = "*"
+
+[lib]
+	name = "relision"
+
+[[bin]]
+	name = "reli"
+	path = "src/main.rs"
