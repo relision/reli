@@ -1,19 +1,13 @@
+// Copyright (c) 2015 by Stacy Prowell.  All rights reserved.
+//
+// Licensed under the BSD 2-Clause license.  See the file LICENSE
+// that is part of this distribution.  This file may not be copied,
+// modified, or distributed except according to those terms.extern
 
-/*
- * This is a block comment.
- * /*
- *  * This is a nested block comment.
- *  * These are permitted!
- *  */
- * More outer comment.
- */
-fn main() {
-	println!(r##"Hello, "world."  With a \n at the end."##);
-}
+//! Provide basic definitions of terms.
 
-/**
- * The enumerated type for terms.
- */
+/// Represent an instance of a term.
+#[derive(Copy, Eq, Debug)]
 pub enum Term {
 	Root,
 	Any,
