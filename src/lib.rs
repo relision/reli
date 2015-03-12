@@ -12,12 +12,34 @@
 
 // Tell the documentation system about some icons and require
 // documentation.  Enable core.
-#![doc(html_logo_url = "",
-		html_favicon_url = "",
-		html_root_url = "")]
+#![doc(html_logo_url = "https://raw.githubusercontent.com/relision/things/master/graphics/relision.png",
+		html_favicon_url = "https://raw.githubusercontent.com/relision/things/master/graphics/favicon.ico",
+		html_root_url = "https://github.com/relision")]
 #![warn(missing_docs)]
-#![feature(core)]
 
-fn hold() {
-	println!("Holding.");
+/* Load platform specific definitions. */
+
+mod win32;
+mod linux;
+mod macos;
+
+#[cfg(target_os = "linux")]
+pub use linux::os_spec;
+#[cfg(target_os = "win32")]
+pub use win32::os_spec;
+#[cfg(target_os = "macos")]
+pub use macos::os_spec;
+#[cfg(not(any(target_os = "macos",
+              target_os = "win32",
+              target_os = "linux")))]
+pub use linux::os_spec;
+
+use std::fs::File;
+use std::path::Path;
+
+/// Get the configuration folder.
+pub fn get_config_dir() -> &'static Path {
+	let path = Path::new(os_spec::get_config_dir());
+	std::old_io::fs::mkdir_recursive(&path);
+	return path;
 }

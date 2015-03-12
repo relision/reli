@@ -9,6 +9,7 @@ extern crate getopts;
 extern crate num;
 extern crate relision;
 use getopts::Options;
+use relision::os_spec;
 
 /* A block of code to figure out the current build platform.  The idea is that
  * we figure out the platform and then make it available at runtime.  Is there
@@ -17,29 +18,6 @@ use getopts::Options;
  * Why do we care?  This determines - among other things - where to find the
  * configuration files.
  */
-
-#[cfg(target_os = "linux")]
-/// Report the target compilation operating system.
-fn tos() -> &'static str {
-  "linux"
-}
-#[cfg(target_os = "win32")]
-/// Report the target compilation operating system.
-fn tos() -> &'static str {
-  "win32"
-}
-#[cfg(target_os = "macos")]
-/// Report the target compilation operating system.
-fn tos() -> &'static str {
-  "macos"
-}
-#[cfg(not(any(target_os = "macos",
-              target_os = "win32",
-              target_os = "linux")))]
-/// Report the target compilation operating system.
-fn tos() -> &'static str {
-  "unknown"
-}
 
 /// The REPL.
 fn repl() {
@@ -72,7 +50,8 @@ fn print_usage(progname: &str, switches: Options) {
 /// # Panics
 /// The command line arguments do not parse correctly.
 fn main() {
-  println!("Running on {}.", tos());
+  println!("Running on {}.", os_spec::tos());
+  println!("Configuration stored at: {}.", os_spec::get_config_dir());
 
   // Get the command line arguments.
   let args: Vec<String> = std::os::args();
