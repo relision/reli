@@ -10,37 +10,23 @@ use num::BigInt;
 use std::rc::Rc;
 
 /// Export the kinds of terms.
-pub use self::Term::{Root, /*Symbol, String,*/ Integer, Float, BitString, Boolean};
+pub use self::Term::{Root, SymbolLiteral, StringLiteral, IntegerLiteral,
+	FloatLiteral, BitStringLiteral, BooleanLiteral};
 
 /// Represent an instance of a term.
-#[derive(Copy, Debug)]
 pub enum Term {
 	/// The special root type.
 	Root,
 	/// Integer literals.
-	Integer(Rc<Term>, BigInt),
+	IntegerLiteral(Rc<Term>, BigInt),
 	/// Float literals.
-	Float(Rc<Term>, BigInt, BigInt, u32),
+	FloatLiteral(Rc<Term>, BigInt, BigInt, u32),
 	/// Bit string literals.
-	BitString(Rc<Term>, BigInt, BigInt),
+	BitStringLiteral(Rc<Term>, BigInt, BigInt),
 	/// Boolean literals.
-	Boolean(Rc<Term>, bool),
-	// /// Symbol literals.
-	// Symbol(Rc<Term>, String),
-	// /// String literals.
-	// String(Rc<Term>, String),
-}
-
-impl Term {
-	pub fn get_typ(&self) -> Term {
-		match *self {
-			Root => Root,
-			// Symbol(typ, _) => typ,
-			// String(typ, _) => typ,
-			Integer(typ, _) => typ,
-			Float(typ, _, _, _) => typ,
-			BitString(typ, _, _) => typ,
-			Boolean(typ, _) => typ
-		}
-	}
+	BooleanLiteral(Rc<Term>, bool),
+	/// Symbol literals.
+	SymbolLiteral(Rc<Term>, String),
+	/// String literals.
+	StringLiteral(Rc<Term>, String),
 }
