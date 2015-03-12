@@ -15,9 +15,13 @@
 // Tell the documentation system about some icons and require
 // documentation.  Enable core.
 #![doc(html_logo_url = "https://raw.githubusercontent.com/relision/things/master/graphics/relision.png",
-		html_favicon_url = "https://raw.githubusercontent.com/relision/things/master/graphics/favicon.ico",
-		html_root_url = "https://github.com/relision")]
+	html_favicon_url = "https://raw.githubusercontent.com/relision/things/master/graphics/favicon.ico",
+	html_root_url = "https://github.com/relision")]
 #![warn(missing_docs)]
+
+extern crate num;
+
+mod terms;
 
 /* Load platform specific definitions. */
 
