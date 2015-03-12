@@ -6,16 +6,27 @@
 
 //! Provide basic definitions of terms.
 
+use num::BigInt;
+use std::rc::Rc;
+
+/// Export the kinds of terms.
+pub use self::Term::{Root, SymbolLiteral, StringLiteral, IntegerLiteral,
+	FloatLiteral, BitStringLiteral, BooleanLiteral};
+
 /// Represent an instance of a term.
-#[derive(Copy, Eq, Debug)]
 pub enum Term {
+	/// The special root type.
 	Root,
-	Any,
-	None,
-	Symbol(Box<Term>, String),
-	String(Box<Term>, String),
-	Integer(Box<Term>, i64),
-	Float(Box<Term>, f64),
-	BitString(Box<Term>, i64, i64),
-	Boolean(Box<Term>, bool),
+	/// Integer literals.
+	IntegerLiteral(Rc<Term>, BigInt),
+	/// Float literals.
+	FloatLiteral(Rc<Term>, BigInt, BigInt, u32),
+	/// Bit string literals.
+	BitStringLiteral(Rc<Term>, BigInt, BigInt),
+	/// Boolean literals.
+	BooleanLiteral(Rc<Term>, bool),
+	/// Symbol literals.
+	SymbolLiteral(Rc<Term>, String),
+	/// String literals.
+	StringLiteral(Rc<Term>, String),
 }

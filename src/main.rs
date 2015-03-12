@@ -11,11 +11,10 @@ extern crate getopts;
 extern crate num;
 extern crate relision;
 use getopts::Options;
-use relision::os_spec;
 
 /// The REPL.
 fn repl() {
-  let mut history_filename = os_spec::get_config_dir();
+  let mut history_filename = relision::get_config_dir();
   history_filename.push_str("/repl.history");
   // We got our filename. Drop the mutability.
   let history_filename = history_filename;
@@ -49,7 +48,7 @@ fn print_usage(progname: &str, switches: Options) {
 
 /// Entry point when run from the prompt.
 fn main() {
-  println!("Running on {}.", os_spec::tos());
+  println!("Running on {}.", relision::get_platform());
   println!("Configuration stored at: {}.", relision::get_config_dir());
 
   // Get the command line arguments.
