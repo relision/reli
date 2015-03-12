@@ -7,6 +7,8 @@
 //! Linux specific definitions.  This crate contains defintions
 //! specific to Linux.
 
+/// Provide Linux specific definitions.
+#[allow(dead_code)]
 pub mod os_spec {
 	use std::env;
 
@@ -27,8 +29,10 @@ pub mod os_spec {
 	pub fn get_config_dir() -> String {
 		match env::var_os("XDG_CONFIG_HOME") {
 			Some(value) => {
-				match value.into_string() {
-					Ok(prefix) => { return prefix + "/elision"; },
+				let mut result = value;
+				result.push("/elision");
+				match result.into_string() {
+					Ok(rawpath) => { return rawpath; },
 					Err(_) => {}
 				};
 			},
@@ -40,7 +44,7 @@ pub mod os_spec {
 				result.push(".config");
 				result.push("elision");
 				match result.into_os_string().into_string() {
-					Ok(res) => { return res; },
+					Ok(rawpath) => { return rawpath; },
 					Err(_) => {}
 				};
 			},

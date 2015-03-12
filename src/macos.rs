@@ -7,6 +7,8 @@
 //! Mac OS X specific definitions.  This crate contains defintions
 //! specific to Apple Mac OS X.
 
+/// Provide Mac OS X specific definitions.
+#[allow(dead_code)]
 pub mod os_spec {
 	use std::env;
 
@@ -29,7 +31,7 @@ pub mod os_spec {
 				result.push("Application Support");
 				result.push("elision");
 				match result.into_os_string().into_string() {
-					Ok(res) => { return res; },
+					Ok(rawpath) => { return rawpath; },
 					Err(_) => {}
 				};
 			},

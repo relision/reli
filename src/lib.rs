@@ -10,6 +10,8 @@
 //! and computing the behavior of compiled software.  Elision is
 //! Turing complete.
 
+#![feature(path,old_io,old_path,old_fs)]
+
 // Tell the documentation system about some icons and require
 // documentation.  Enable core.
 #![doc(html_logo_url = "https://raw.githubusercontent.com/relision/things/master/graphics/relision.png",
@@ -34,12 +36,17 @@ pub use macos::os_spec;
               target_os = "linux")))]
 pub use linux::os_spec;
 
-use std::fs::File;
-use std::path::Path;
+use std::old_path::posix::Path;
 
-/// Get the configuration folder.
-pub fn get_config_dir() -> &'static Path {
-	let path = Path::new(os_spec::get_config_dir());
-	std::old_io::fs::mkdir_recursive(&path);
-	return path;
+/// Get the configuration folder.  This creates it if it does not exist.
+pub fn get_config_dir() -> String {
+	let location = os_spec::get_config_dir();
+	let path = Path::new(&location);
+	match std::old_io::fs::mkdir_recursive(&path, std::old_io::USER_RWX) {
+		Ok(_) => {},
+		Err(error) => {
+			panic!("Failed to create configuration folder: {}", error);
+		}
+	};
+	return location;
 }

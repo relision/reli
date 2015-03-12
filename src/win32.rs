@@ -7,6 +7,8 @@
 //! Windows specific definitions.  This crate contains defintions
 //! specific to Microsoft Windows.
 
+/// Provide Microsoft Windows specific definitions.
+#[allow(dead_code)]
 pub mod os_spec {
 	use std::env;
 
