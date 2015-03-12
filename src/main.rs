@@ -15,10 +15,18 @@ use relision::os_spec;
 
 /// The REPL.
 fn repl() {
+  let mut history_filename = os_spec::get_config_dir();
+  history_filename.push_str("/repl.history");
+  // We got our filename. Drop the mutability.
+  let history_filename = history_filename;
+  linenoise::history_load(&history_filename);
   loop {
     let val = linenoise::input("e> ");
     match val {
-        None => { break }
+        None => { 
+            linenoise::history_save(&history_filename);
+            break;
+        }
         Some(input) => {
             println!("{}", input);
             linenoise::history_add(input.as_slice());
