@@ -4,42 +4,14 @@
 // that is part of this distribution.  This file may not be copied,
 // modified, or distributed except according to those terms.extern
 
+#![feature(collections,core)]
+
 extern crate linenoise;
 extern crate getopts;
 extern crate num;
 extern crate relision;
 use getopts::Options;
-
-/* A block of code to figure out the current build platform.  The idea is that
- * we figure out the platform and then make it available at runtime.  Is there
- * a Posix way to do this?
- *
- * Why do we care?  This determines - among other things - where to find the
- * configuration files.
- */
-
-#[cfg(target_os = "linux")]
-/// Report the target compilation operating system.
-fn tos() -> &'static str {
-  "linux"
-}
-#[cfg(target_os = "win32")]
-/// Report the target compilation operating system.
-fn tos() -> &'static str {
-  "win32"
-}
-#[cfg(target_os = "macos")]
-/// Report the target compilation operating system.
-fn tos() -> &'static str {
-  "macos"
-}
-#[cfg(not(any(target_os = "macos",
-              target_os = "win32",
-              target_os = "linux")))]
-/// Report the target compilation operating system.
-fn tos() -> &'static str {
-  "unknown"
-}
+use relision::os_spec;
 
 /// The REPL.
 fn repl() {
@@ -68,14 +40,12 @@ fn print_usage(progname: &str, switches: Options) {
 }
 
 /// Entry point when run from the prompt.
-///
-/// # Panics
-/// The command line arguments do not parse correctly.
 fn main() {
-  println!("Running on {}.", tos());
+  println!("Running on {}.", os_spec::tos());
+  println!("Configuration stored at: {}.", relision::get_config_dir());
 
   // Get the command line arguments.
-  let args: Vec<String> = std::os::args();
+  let args = std::env::args().collect::<Vec<String>>();
   let me = args[0].clone();
 
   // Specify the switches this wrapper takes.
