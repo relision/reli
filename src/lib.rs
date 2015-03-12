@@ -30,17 +30,22 @@ mod linux;
 mod macos;
 
 #[cfg(target_os = "linux")]
-pub use linux::os_spec;
+use linux::os_spec;
 #[cfg(target_os = "win32")]
-pub use win32::os_spec;
+use win32::os_spec;
 #[cfg(target_os = "macos")]
-pub use macos::os_spec;
+use macos::os_spec;
 #[cfg(not(any(target_os = "macos",
               target_os = "win32",
               target_os = "linux")))]
-pub use linux::os_spec;
+use linux::os_spec;
 
 use std::old_path::posix::Path;
+
+/// Get the name of the platform on which this was built.
+pub fn get_platform() -> &'static str {
+	os_spec::tos()
+}
 
 /// Get the configuration folder.  This creates it if it does not exist.
 pub fn get_config_dir() -> String {
