@@ -1,4 +1,5 @@
 # relision
+[![Build Status](https://travis-ci.org/sprowell/reli.svg?branch=master)](https://travis-ci.org/sprowell/reli)
 
 A Rust library and REPL for the Elision term rewriter.  This is being developed in [Rust][rust].  The project uses [Semantic Versioning][semantic-version], and is released under the two-clause BSD license (see the License section below).
 
@@ -6,15 +7,6 @@ A Rust library and REPL for the Elision term rewriter.  This is being developed 
 ## Acknowledgements
 
 This project uses [TOML][toml] (via [toml-rs][]) for markup and [linenoise][] (via [rust-linenoise][]) for line parsing.  Arbitrary precision integers are provided by [Num][num].
-
-
-[toml]:				https://github.com/toml-lang/toml
-[toml-rs]:			https://github.com/alexcrichton/toml-rs
-[rust]:				http://www.rust-lang.org
-[num]:				https://github.com/rust-lang/num
-[linenoise]:		https://github.com/antirez/linenoise
-[rust-linenoise]:	https://github.com/octplane/rust-linenoise
-[semantic-version]:	http://semver.org
 
 
 ## License
@@ -43,3 +35,12 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </pre>
+
+
+[toml]:				https://github.com/toml-lang/toml
+[toml-rs]:			https://github.com/alexcrichton/toml-rs
+[rust]:				http://www.rust-lang.org
+[num]:				https://github.com/rust-lang/num
+[linenoise]:		https://github.com/antirez/linenoise
+[rust-linenoise]:	https://github.com/octplane/rust-linenoise
+[semantic-version]:	http://semver.org
