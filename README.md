@@ -1,6 +1,6 @@
 # relision
 
-![Build Status](https://travis-ci.org/sprowell/reli.svg?branch=master)
+![Build Status](https://travis-ci.org/relision/reli.svg?branch=master)
 
 A Rust library and REPL for the Elision term rewriter.  This is being developed in [Rust][rust].  The project uses [Semantic Versioning][semantic-version], and is released under the two-clause BSD license (see the License section below).
 
