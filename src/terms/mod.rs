@@ -9,24 +9,18 @@
 use num::BigInt;
 use std::rc::Rc;
 
-/// Export the kinds of terms.
-pub use self::Term::{Root, SymbolLiteral, StringLiteral, IntegerLiteral,
-	FloatLiteral, BitStringLiteral, BooleanLiteral};
+mod root;
 
-/// Represent an instance of a term.
-pub enum Term {
+/// Export the kinds of terms.
+pub use self::TermKind::{RootKind};
+
+/// Represent the kind of a term.
+pub enum TermKind {
 	/// The special root type.
-	Root,
-	/// Integer literals.
-	IntegerLiteral(Rc<Term>, BigInt),
-	/// Float literals.
-	FloatLiteral(Rc<Term>, BigInt, BigInt, u32),
-	/// Bit string literals.
-	BitStringLiteral(Rc<Term>, BigInt, BigInt),
-	/// Boolean literals.
-	BooleanLiteral(Rc<Term>, bool),
-	/// Symbol literals.
-	SymbolLiteral(Rc<Term>, String),
-	/// String literals.
-	StringLiteral(Rc<Term>, String),
+	RootKind,
+}
+
+trait Term {
+	fn get_type(&self) -> Rc<Term>;
+	fn get_kind(&self) -> TermKind;
 }
