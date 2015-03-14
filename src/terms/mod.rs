@@ -6,21 +6,23 @@
 
 //! Provide basic definitions of terms.
 
-use num::BigInt;
+//use num::BigInt;
 use std::rc::Rc;
 
-mod root;
+//mod root;
 
 /// Export the kinds of terms.
 pub use self::TermKind::{RootKind};
 
 /// Represent the kind of a term.
+#[allow(dead_code)]
 pub enum TermKind {
 	/// The special root type.
 	RootKind,
 }
 
+/// Functionality common to all terms.
 trait Term {
+	/// Get the type of the term.
 	fn get_type(&self) -> Rc<Term>;
-	fn get_kind(&self) -> TermKind;
 }
