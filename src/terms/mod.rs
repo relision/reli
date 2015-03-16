@@ -6,25 +6,7 @@
 
 //! Provide basic definitions of terms.
 
-/// Represent an instance of a term.
-#[derive(Debug, Clone)]
-pub enum TermKind {
-	ERoot,
-	EAny,
-	ENone,
-	Symbol,//(Box<Term>, String),
-	EString,//(Box<Term>, String),
-	Integer,//(Box<Term>, i64),
-	Float,//(Box<Term>, f64),
-	BitString,//(Box<Term>, Vec<i8>),
-	Boolean,//(Box<Term>, bool),
-}
-
-/*pub trait Term {
-    //Return the kind
-     fn get_kind(&self) -> TermKind;
-}*/
-
+/// Represents root terms.
 struct ERoot ( pub () );
 struct EAny ( pub () );
 struct ENone ( pub () );
@@ -47,10 +29,6 @@ impl<T> Term<T> {
         Term { value: t }
     }
 }
-
-/*impl Term for RootTerm{
-    fn get_kind(&self) -> TermKind { self.kind.clone() }
-}*/
 
 #[test]
 fn term_type_check_test() -> (){
