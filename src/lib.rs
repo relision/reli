@@ -24,6 +24,7 @@
 mod win32;
 mod linux;
 mod macos;
+mod terms;
 
 #[cfg(target_os = "linux")]
 pub use linux::os_spec;
@@ -50,3 +51,4 @@ pub fn get_config_dir() -> String {
 	};
 	return location;
 }
+
