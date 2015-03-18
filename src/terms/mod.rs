@@ -54,7 +54,7 @@ impl<T> Term<T>
 #[test]
 fn term_type_check_test() -> (){
     let termable = EString::new("Test".to_string());
-    let stringterm: Term<EString> = Term::new(termable);
+    let stringterm = Term::new(termable);
    // let nestedterm = Term::new(Term::new(Integer(3)));
     let stringval = &stringterm.unwrap().native();
     panic!("Intentionial panic. {:?}", stringval);
