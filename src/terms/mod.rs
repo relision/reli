@@ -22,15 +22,29 @@ struct Float( f64 );
 struct BitString( BitVec );
 struct Boolean( bool );
 
+trait Termable<T>{
+    fn new(value: T) -> Self;
+    fn native(&self) -> &T;
+}
+
+impl Termable<String> for EString{
+    fn new(value: String) -> Self{
+        EString(value)
+    }
+    fn native(&self) -> &String {
+        &self.0
+    }
+}
+
 #[derive(Debug)]
 struct Term<T> {
     value: T,
 }
 
 impl<T> Term<T>
-//where T: Tuple1
 {
     pub fn new(t: T) -> Term<T> {
+         
         Term { value: t }
     }
     pub fn unwrap(&self) -> &T {
@@ -38,14 +52,12 @@ impl<T> Term<T>
     }
 }
 
-
-
 #[test]
 fn term_type_check_test() -> (){
-    let stringterm = Term::new(EString("test".to_string()));
+    let stringterm = Term::new(EString::new("test".to_string()));
     let nestedterm = Term::new(Term::new(Integer(3)));
     //how to make this access not require .0?
-    let stringval = &stringterm.unwrap().0;
+    let stringval = &stringterm.unwrap().native();
     panic!("Intentionial panic. {:?}", stringval);
 }
 
