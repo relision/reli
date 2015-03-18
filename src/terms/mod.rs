@@ -28,7 +28,7 @@ trait Termable<T>{
 }
 
 impl Termable<String> for EString{
-    fn new(value: String) -> Self{
+    fn new(value: String) -> EString{
         EString(value)
     }
     fn native(&self) -> &String {
@@ -43,8 +43,7 @@ struct Term<T> {
 
 impl<T> Term<T>
 {
-    pub fn new(t: T) -> Term<T> {
-         
+    pub fn new<U>(t: U) -> Term<U> where U: Termable<T> {
         Term { value: t }
     }
     pub fn unwrap(&self) -> &T {
@@ -54,9 +53,9 @@ impl<T> Term<T>
 
 #[test]
 fn term_type_check_test() -> (){
-    let stringterm = Term::new(EString::new("test".to_string()));
-    let nestedterm = Term::new(Term::new(Integer(3)));
-    //how to make this access not require .0?
+    let termable = EString::new("Test".to_string());
+    let stringterm: Term<EString> = Term::new(termable);
+   // let nestedterm = Term::new(Term::new(Integer(3)));
     let stringval = &stringterm.unwrap().native();
     panic!("Intentionial panic. {:?}", stringval);
 }
