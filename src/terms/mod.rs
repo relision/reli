@@ -72,9 +72,9 @@ fn term_type_check_test() -> (){
     let termable = EString::new("Test".to_string());
     let mut stringterm = Term::new(termable);
     let integerterm = Term::new(Integer(3));
-    // Uncomment the following line to see the type checker assist in action
+    // Uncomment the following line to see the term type checker assist in action
     // stringterm = integerterm;
-    // The following line shoudl fail to compile
+    // The following line shoudl fail to compile because i32 does not have the Termable trait.
     // let failterm = Term::new(3);
     
     //Nested terms don't work right now
