@@ -36,6 +36,15 @@ impl Termable<String> for EString{
     }
 }
 
+impl Termable<isize> for Integer{
+    fn new(value: isize) -> Integer{
+        Integer(value)
+    }
+    fn native(&self) -> &isize {
+        &self.0
+    }
+}
+
 #[derive(Debug)]
 struct Term<T> {
     value: T,
@@ -54,8 +63,13 @@ impl<T> Term<T>
 #[test]
 fn term_type_check_test() -> (){
     let termable = EString::new("Test".to_string());
-    let stringterm = Term::new(termable);
-   // let nestedterm = Term::new(Term::new(Integer(3)));
+    let mut stringterm = Term::new(termable);
+    let integerterm = Term::new(Integer(3));
+    // Uncomment the following line to see the type checker assist in action
+    // stringterm = integerterm;
+    
+    //Nested terms don't work right now
+    // let nestedterm = Term::new(Term::new(Integer(3)));
     let stringval = &stringterm.unwrap().native();
     panic!("Intentionial panic. {:?}", stringval);
 }
