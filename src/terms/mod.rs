@@ -50,6 +50,13 @@ struct Term<T> {
     value: T,
 }
 
+impl<T> Termable<T> for Term<T>{
+    fn new(t: T) -> Term<T> {
+        Term { value: t }
+    }
+    fn native(&self) -> &T { &self.value }
+}
+
 impl<T> Term<T>
 {
     pub fn new<U>(t: U) -> Term<U> where U: Termable<T> {
@@ -67,9 +74,11 @@ fn term_type_check_test() -> (){
     let integerterm = Term::new(Integer(3));
     // Uncomment the following line to see the type checker assist in action
     // stringterm = integerterm;
+    // The following line shoudl fail to compile
+    // let failterm = Term::new(3);
     
     //Nested terms don't work right now
-    // let nestedterm = Term::new(Term::new(Integer(3)));
+    let nestedterm = Term::new(Term::new(Integer(3)));
     let stringval = &stringterm.unwrap().native();
     panic!("Intentionial panic. {:?}", stringval);
 }
