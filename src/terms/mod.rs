@@ -21,6 +21,8 @@ struct Integer( isize );
 struct Float( f64 );
 struct BitString( BitVec );
 struct Boolean( bool );
+#[derive(Debug)]
+struct Term<T> ( T );
 
 trait Termable<T>{
     fn new(value: T) -> Self;
@@ -45,25 +47,20 @@ impl Termable<isize> for Integer{
     }
 }
 
-#[derive(Debug)]
-struct Term<T> {
-    value: T,
-}
-
 impl<T> Termable<T> for Term<T>{
     fn new(t: T) -> Term<T> {
-        Term { value: t }
+        Term ( t )
     }
-    fn native(&self) -> &T { &self.value }
+    fn native(&self) -> &T { &self.0 }
 }
 
 impl<T> Term<T>
 {
     pub fn new<U>(t: U) -> Term<U> where U: Termable<T> {
-        Term { value: t }
+        Term ( t )
     }
     pub fn unwrap(&self) -> &T {
-        &self.value
+        &self.0
     }
 }
 
