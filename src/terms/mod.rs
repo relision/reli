@@ -15,68 +15,56 @@ struct Any ( () );
 struct ENone ( () );
 #[derive(Debug)]
 struct EString( String ) ;
+impl EString{
+    fn new(val: &str) -> Self { EString(val.to_string()) }
+}
+
 struct Symbol( String );
 #[derive(Debug)]
 struct Integer( isize );
+impl Integer{
+    fn new(val: isize) -> Self { Integer(val) }
+}
+
 struct Float( f64 );
 struct BitString( BitVec );
 struct Boolean( bool );
-#[derive(Debug)]
-struct Term<T> ( T );
+//#[derive(Debug)]
+//struct Term<T> ( T );
 
-trait Termable<T>{
-    fn new(value: T) -> Self;
+trait RootType<T>{
     fn native(&self) -> &T;
 }
-
-impl Termable<String> for EString{
-    fn new(value: String) -> EString{
-        EString(value)
-    }
-    fn native(&self) -> &String {
-        &self.0
-    }
+impl RootType<String> for EString{
+    fn native(&self) -> &String { &self.0 }
+}
+impl RootType<isize> for Integer{
+    fn native(&self) -> &isize { &self.0 }
 }
 
-impl Termable<isize> for Integer{
-    fn new(value: isize) -> Integer{
-        Integer(value)
-    }
-    fn native(&self) -> &isize {
-        &self.0
-    }
+
+
+trait Term{
+    fn to_string(&self) -> String { "This is a Term.".to_string() }
 }
 
-impl<T> Termable<T> for Term<T>{
-    fn new(t: T) -> Term<T> {
-        Term ( t )
-    }
-    fn native(&self) -> &T { &self.0 }
+impl Term for EString{
+    fn to_string(&self) -> String { "This is an EString".to_string() }   
 }
 
-impl<T> Term<T>
-{
-    pub fn new<U>(t: U) -> Term<U> where U: Termable<T> {
-        Term ( t )
-    }
-    pub fn unwrap(&self) -> &T {
-        &self.0
-    }
+impl Term for Integer{
+    fn to_string(&self) -> String {"This is an Integer".to_string() }
 }
 
 #[test]
 fn term_type_check_test() -> (){
-    let termable = EString::new("Test".to_string());
-    let mut stringterm = Term::new(termable);
-    let integerterm = Term::new(Integer(3));
+    let mut estring = EString("Test".to_string());
+    let integer = Integer(3);
     // Uncomment the following line to see the term type checker assist in action
     // stringterm = integerterm;
     // The following line shoudl fail to compile because i32 does not have the Termable trait.
-    // let failterm = Term::new(3);
+    //estring = integer;
     
-    //Nested terms don't work right now
-    let nestedterm = Term::new(Term::new(Integer(3)));
-    let stringval = &stringterm.unwrap().native();
-    panic!("Intentionial panic. {:?}", stringval);
+    panic!("Intentionial panic. {:?}", estring.to_string());
 }
 
