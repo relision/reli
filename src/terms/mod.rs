@@ -38,13 +38,13 @@ struct Lambda{
     parameter: Box<Term>,
     guard    : Box<Term>,
     body     : Box<Term>,
-    //type,
+    product  : (),
     index    : usize,
-    stuff     : (),
+    stuff    : (),
 }
 impl Lambda{
     fn new(p: Box<Term>, g: Box<Term>, b: Box<Term>) -> Self{
-        Lambda{parameter: p, guard: g, body: b, index: 0, stuff: ()}
+        Lambda{parameter: p, guard: g, body: b, product: (), index: 0, stuff: ()}
     }
 }
 
@@ -76,7 +76,8 @@ impl Term for Lambda{
 
 #[test]
 fn term_type_check_test() -> (){
-    let estring = EString("Test".to_string());
+    let estring = EString("Test Lambda Body".to_string());
+    let estring2 = EString("Test native".to_string());
     let integer = Integer::new(3);
     let i2 = Integer::new(5);
     let lambda = Lambda::new(Box::new(estring), Box::new(integer),
@@ -84,6 +85,6 @@ fn term_type_check_test() -> (){
     // Uncomment the following line to see the term type checker assist in action
     // stringterm = integerterm;
     
-    panic!("Intentionial panic. {:?}", lambda.to_string() );
+    panic!("Intentionial panic. {:?}", estring2.native().to_string() );
 }
 
