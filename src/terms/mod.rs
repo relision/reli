@@ -58,8 +58,6 @@ impl RootType<isize> for Integer{
     fn native(&self) -> &isize { &self.0 }
 }
 
-
-
 trait Term{
     fn to_string(&self) -> String { "This is a Term.".to_string() }
 }
@@ -85,8 +83,6 @@ fn term_type_check_test() -> (){
                  Box::new(i2));
     // Uncomment the following line to see the term type checker assist in action
     // stringterm = integerterm;
-    // The following line shoudl fail to compile because i32 does not have the Termable trait.
-    //estring = integer;
     
     panic!("Intentionial panic. {:?}", lambda.to_string() );
 }
