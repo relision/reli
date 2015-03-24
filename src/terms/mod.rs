@@ -7,12 +7,13 @@
 //! Provide basic definitions of terms.
 
 use std::collections::BitVec;
-//use std::tuple::Tuple1;
+use std::rc::Rc;
 
 /// Represents root terms.
 struct Root ( () );
 struct Any ( () );
 struct ENone ( () );
+
 #[derive(Debug)]
 struct EString( String ) ;
 impl EString{
@@ -29,8 +30,23 @@ impl Integer{
 struct Float( f64 );
 struct BitString( BitVec );
 struct Boolean( bool );
+
+//For simplicity while experimenting, I'm not using Rc<T>
+//Can't derive Debug automatically for Term
 //#[derive(Debug)]
-//struct Term<T> ( T );
+struct Lambda{
+    parameter: Box<Term>,
+    guard    : Box<Term>,
+    body     : Box<Term>,
+    //type,
+    index    : usize,
+    stuff     : (),
+}
+impl Lambda{
+    fn new(p: Box<Term>, g: Box<Term>, b: Box<Term>) -> Self{
+        Lambda{parameter: p, guard: g, body: b, index: 0, stuff: ()}
+    }
+}
 
 trait RootType<T>{
     fn native(&self) -> &T;
@@ -56,15 +72,22 @@ impl Term for Integer{
     fn to_string(&self) -> String {"This is an Integer".to_string() }
 }
 
+impl Term for Lambda{
+    fn to_string(&self) -> String {"This is a Lambda.".to_string() }
+}
+
 #[test]
 fn term_type_check_test() -> (){
-    let mut estring = EString("Test".to_string());
-    let integer = Integer(3);
+    let estring = EString("Test".to_string());
+    let integer = Integer::new(3);
+    let i2 = Integer::new(5);
+    let lambda = Lambda::new(Box::new(estring), Box::new(integer),
+                 Box::new(i2));
     // Uncomment the following line to see the term type checker assist in action
     // stringterm = integerterm;
     // The following line shoudl fail to compile because i32 does not have the Termable trait.
     //estring = integer;
     
-    panic!("Intentionial panic. {:?}", estring.to_string());
+    panic!("Intentionial panic. {:?}", lambda.to_string() );
 }
 
