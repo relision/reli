@@ -10,7 +10,7 @@
 //! and computing the behavior of compiled software.  Elision is
 //! Turing complete.
 
-#![feature(path,old_io,old_path,old_fs)]
+#![feature(path,old_io,old_path,old_fs,collections)]
 
 // Tell the documentation system about some icons and require
 // documentation.  Enable core.
