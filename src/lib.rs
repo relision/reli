@@ -10,7 +10,7 @@
 //! and computing the behavior of compiled software.  Elision is
 //! Turing complete.
 
-#![feature(path,old_io,old_path,old_fs)]
+#![feature(path,old_io,old_path,old_fs,collections)]
 
 // Tell the documentation system about some icons and require
 // documentation.  Enable core.
@@ -21,13 +21,12 @@
 
 extern crate num;
 
-mod terms;
-
 /* Load platform specific definitions. */
 
 mod win32;
 mod linux;
 mod macos;
+mod terms;
 
 #[cfg(target_os = "linux")]
 use linux::os_spec;
@@ -59,3 +58,4 @@ pub fn get_config_dir() -> String {
 	};
 	return location;
 }
+
