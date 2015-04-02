@@ -5,7 +5,6 @@
 // modified, or distributed except according to those terms.extern
 
 //! Provide basic definitions of terms.
-
 use std::collections::BitVec;
 use std::rc::Rc;
 
@@ -85,6 +84,6 @@ fn term_type_check_test() -> (){
     // Uncomment the following line to see the term type checker assist in action
     // stringterm = integerterm;
     
-    panic!("Intentionial panic. {:?}", estring2.native().to_string() );
+    assert!(estring2.native().to_string() == "Test native".to_string() );
 }
 
