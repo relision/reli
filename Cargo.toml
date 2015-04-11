@@ -18,6 +18,8 @@ The Elision term rewriter.
 	num = "~0.1.15"
 	# The getopts library provides simple command line parsing.
 	getopts = "*"
+	# We need lazy static data.
+	lazy_static = "~0.1.8"
 
 [lib]
 	name = "relision"

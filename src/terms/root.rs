@@ -4,9 +4,18 @@
 // that is part of this distribution.  This file may not be copied,
 // modified, or distributed except according to those terms.extern
 
-//! Provide basic definitions of terms.
+//! Define the special root term.
 
-//use num::BigInt;
-//use std::rc::Rc;
+pub trait Root;
 
-mod locus;
+struct iRoot;
+
+impl Root for iRoot;
+
+impl Term for iRoot {
+	fn get_type() -> Rc<Root> {
+		Rc::new(self)
+	}
+}
+
+static let known_root = iRoot;

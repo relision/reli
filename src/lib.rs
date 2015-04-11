@@ -19,6 +19,9 @@
 	html_root_url = "https://github.com/relision")]
 #![warn(missing_docs)]
 
+#[macro_use]
+extern crate lazy_static;
+
 extern crate num;
 
 mod terms;
