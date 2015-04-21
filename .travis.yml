@@ -1,5 +1,5 @@
 language: rust
-rust: 1.0.0-beta.2
+rust: beta
 
 notifications:
   slack: cwr:H6vqW8fu5grRTifRT9q4oZ9P
