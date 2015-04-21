@@ -4,8 +4,6 @@
 // that is part of this distribution.  This file may not be copied,
 // modified, or distributed except according to those terms.extern
 
-#![feature(collections,core)]
-
 extern crate linenoise;
 extern crate getopts;
 extern crate num;
@@ -28,8 +26,8 @@ fn repl() {
         }
         Some(input) => {
             println!("{}", input);
-            linenoise::history_add(input.as_slice());
-            if input.as_slice() == "clear" {
+            linenoise::history_add(&input);
+            if input == "clear" {
               linenoise::clear_screen();
             }
         }
@@ -61,8 +59,8 @@ fn main() {
 
   // Now process all command line switches.  The "tail" removes the program
   // name.
-  let matches = match switches.parse(args.tail()) {
-    Ok(mat) => { mat }
+  let matches = match switches.parse(args) {
+    Ok(mat) => mat,
     Err(fail) => {
       println!("ERROR parsing command line arguments:");
       println!("  {}", fail.to_string());

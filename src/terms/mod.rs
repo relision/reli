@@ -5,7 +5,6 @@
 // modified, or distributed except according to those terms.extern
 
 //! Provide basic definitions of terms.
-use std::collections::BitVec;
 use std::rc::Rc;
 
 /// Represents root terms.
@@ -27,7 +26,7 @@ impl Integer{
 }
 
 struct Float( f64 );
-struct BitString( BitVec );
+struct BitString( [u8] );
 struct Boolean( bool );
 
 //For simplicity while experimenting, I'm not using Rc<T>
