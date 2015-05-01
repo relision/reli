@@ -37,8 +37,6 @@ use macos::os_spec;
               target_os = "linux")))]
 use linux::os_spec;
 
-use std::path::Path;
-
 /// Get the name of the platform on which this was built.
 pub fn get_platform() -> &'static str {
 	os_spec::tos()
@@ -46,14 +44,11 @@ pub fn get_platform() -> &'static str {
 
 /// Get the configuration folder.  This creates it if it does not exist.
 pub fn get_config_dir() -> String {
-    let location = os_spec::get_config_dir();
-    match std::fs::create_dir_all(&location) {
-        Ok(_) => {},
-        Err(error) => {
-            panic!("Failed to create configuration folder: {}", error);
-		}
-	};
+    let location =  os_spec::get_config_dir();
+    std::fs::create_dir_all(&location).unwrap_or_else(|err| {
+            panic!("Failed to create configuration folder: {}", err);
+        }
+	);
 
 	return location;
 }
-
