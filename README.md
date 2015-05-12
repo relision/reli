@@ -1,5 +1,6 @@
 # relision
 [![Build Status](https://travis-ci.org/relision/reli.svg?branch=master)](https://travis-ci.org/relision/reli)
+[![Coverage Status](https://coveralls.io/repos/relision/reli/badge.svg)](https://coveralls.io/r/relision/reli)
 
 A Rust library and REPL for the Elision term rewriter.  This is being developed in [Rust][rust].  The project uses [Semantic Versioning][semantic-version], and is released under the two-clause BSD license (see the License section below).
 
