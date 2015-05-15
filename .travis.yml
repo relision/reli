@@ -2,7 +2,7 @@ language: rust
 sudo: required
 
 rust:
-  - beta
+  - stable
 before_script:
   - pip install 'travis-cargo<0.2' --user && export PATH=$HOME/.local/bin:$PATH
 script:
@@ -12,7 +12,7 @@ script:
       travis-cargo bench &&
       travis-cargo doc
 after_success:
-  - travis-cargo --only beta doc-upload
+  - travis-cargo --only stable doc-upload
   - travis-cargo coveralls
 
 notifications:
