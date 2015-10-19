@@ -1,19 +1,20 @@
-// Copyright (c) 2015 by Stacy Prowell.  All rights reserved.
-//
-// Licensed under the BSD 2-Clause license.  See the file LICENSE
-// that is part of this distribution.  This file may not be copied,
-// modified, or distributed except according to those terms.extern
-
-//! The Elision term rewriting library.
+//!           _ _     _
+//!  _ __ ___| (_)___(_) ___  _ __
+//! | '__/ _ \ | / __| |/ _ \| '_ \
+//! | | |  __/ | \__ \ | (_) | | | |
+//! |_|  \___|_|_|___/_|\___/|_| |_|
+//! The relision term rewriting library.
 //!
-//! Elision is a custom term rewriter intended for use in analyzing
-//! and computing the behavior of compiled software.  Elision is
-//! Turing complete.
-
-#![feature(path,old_io,old_path,old_fs)]
+//! # License
+//!
+//! Copyright (c) 2015 by Stacy Prowell.  All rights reserved.
+//!
+//! Licensed under the BSD 2-Clause license.  See the file LICENSE
+//! that is part of this distribution.  This file may not be copied,
+//! modified, or distributed except according to those terms.
 
 // Tell the documentation system about some icons and require
-// documentation.  Enable core.
+// documentation.
 #![doc(html_logo_url = "https://raw.githubusercontent.com/relision/things/master/graphics/relision.png",
 	html_favicon_url = "https://raw.githubusercontent.com/relision/things/master/graphics/favicon.ico",
 	html_root_url = "https://github.com/relision")]
@@ -21,44 +22,17 @@
 
 #[macro_use]
 extern crate lazy_static;
-
 extern crate num;
 
-mod terms;
-
-/* Load platform specific definitions. */
-
-mod win32;
-mod linux;
-mod macos;
-
-#[cfg(target_os = "linux")]
-use linux::os_spec;
-#[cfg(target_os = "win32")]
-use win32::os_spec;
-#[cfg(target_os = "macos")]
-use macos::os_spec;
-#[cfg(not(any(target_os = "macos",
-              target_os = "win32",
-              target_os = "linux")))]
-use linux::os_spec;
-
-use std::old_path::posix::Path;
-
-/// Get the name of the platform on which this was built.
-pub fn get_platform() -> &'static str {
-	os_spec::tos()
+/// Get the name of the platform for which this version of relision was
+/// compiled.
+pub fn get_platform() -> String {
+	"".to_string()
 }
 
-/// Get the configuration folder.  This creates it if it does not exist.
+/// Get the path to the configuration directory where relision should store
+/// its persistent state, configuration information, etc.  This should be
+/// a readable and writeable folder.
 pub fn get_config_dir() -> String {
-	let location = os_spec::get_config_dir();
-	let path = Path::new(&location);
-	match std::old_io::fs::mkdir_recursive(&path, std::old_io::USER_RWX) {
-		Ok(_) => {},
-		Err(error) => {
-			panic!("Failed to create configuration folder: {}", error);
-		}
-	};
-	return location;
+	"".to_string()
 }

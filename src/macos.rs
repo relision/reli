@@ -2,7 +2,7 @@
 //
 // Licensed under the BSD 2-Clause license.  See the file LICENSE
 // that is part of this distribution.  This file may not be copied,
-// modified, or distributed except according to those terms.extern
+// modified, or distributed except according to those terms.
 
 //! Mac OS X specific definitions.  This crate contains defintions
 //! specific to Apple Mac OS X.
