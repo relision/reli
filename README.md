@@ -2,7 +2,15 @@
 [![Build Status](https://travis-ci.org/relision/reli.svg?branch=master)](https://travis-ci.org/relision/reli)
 [![Coverage Status](https://coveralls.io/repos/relision/reli/badge.svg)](https://coveralls.io/r/relision/reli)
 
-The library and REPL for the relision term rewriter.  This is being developed in [Rust][rust].  The project uses [Semantic Versioning][semantic-version], and is released under the two-clause BSD license (see the License section below).
+```text
+           _ _     _
+  _ __ ___| (_)___(_) ___  _ __
+ | '__/ _ \ | / __| |/ _ \| '_ \
+ | | |  __/ | \__ \ | (_) | | | |
+ |_|  \___|_|_|___/_|\___/|_| |_|
+```
+
+Relision is a term rewriting library and REPL.  Relision is being developed in [Rust][rust].  The project uses [Semantic Versioning][semantic-version], and is released under the two-clause BSD license (see the License section below).
 
 
 ## Acknowledgements
