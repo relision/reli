@@ -1,8 +1,10 @@
+//! ```text
 //!           _ _     _
 //!  _ __ ___| (_)___(_) ___  _ __
 //! | '__/ _ \ | / __| |/ _ \| '_ \
 //! | | |  __/ | \__ \ | (_) | | | |
 //! |_|  \___|_|_|___/_|\___/|_| |_|
+//! ```
 //! The relision term rewriting library.
 //!
 //! # License
@@ -61,8 +63,9 @@ fn banner() {
 | | |  __/ | \__ \ | (_) | | | |
 |_|  \___|_|_|___/_|\___/|_| |_|
 The relision term rewriting library.
-
-"#)
+"#);
+    println!("Version: {:?}",
+        option_env!("CARGO_PKG_VERSION").unwrap_or("unspecified"));
 }
 
 /// Entry point when run from the prompt.

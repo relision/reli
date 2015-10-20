@@ -2,8 +2,8 @@
 	name = "relision"
 	# The relision project uses semantic versioning.
 	version = "0.0.1"
-	authors = ["The Elision Development Team"]
-	license = "BSD/2-Clause"
+	authors = ["The Relision Development Team"]
+	license = "BSD-2-Clause"
 	readme = "README.md"
 	repository = "https://github.com/relision/reli"
 	homepage = "https://github.com/relision/reli"
@@ -25,5 +25,6 @@ The relision term rewriter.
 	name = "relision"
 
 [[bin]]
-	name = "reli"
+	name = "relision"
 	path = "src/main.rs"
+	doc = false
