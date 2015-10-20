@@ -22,10 +22,7 @@ use std::env;
 
 /// The REPL.
 fn repl() {
-  let mut history_filename = relision::get_config_dir();
-  history_filename.push_str("/repl.history");
-  // We got our filename. Drop the mutability.
-  let history_filename = history_filename;
+  let  history_filename = relision::get_config_dir() + ("/repl.history");
   linenoise::history_load(&history_filename);
   loop {
     let val = linenoise::input("e> ");

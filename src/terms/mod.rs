@@ -5,8 +5,83 @@
 // modified, or distributed except according to those terms.extern
 
 //! Provide basic definitions of terms.
+use std::rc::Rc;
 
-//use num::BigInt;
-//use std::rc::Rc;
+/// Represents root terms.
+struct Root ( () );
+struct Any ( () );
+struct ENone ( () );
 
-mod locus;
+#[derive(Debug)]
+struct EString( String ) ;
+impl EString{
+    fn new(val: &str) -> Self { EString(val.to_string()) }
+}
+
+struct Symbol( String );
+#[derive(Debug)]
+struct Integer( isize );
+impl Integer{
+    fn new(val: isize) -> Self { Integer(val) }
+}
+
+struct Float( f64 );
+struct BitString( [u8] );
+struct Boolean( bool );
+
+//For simplicity while experimenting, I'm not using Rc<T>
+//Can't derive Debug automatically for Term
+//#[derive(Debug)]
+struct Lambda{
+    parameter: Box<Term>,
+    guard    : Box<Term>,
+    body     : Box<Term>,
+    product  : (),
+    index    : usize,
+    stuff    : (),
+}
+impl Lambda{
+    fn new(p: Box<Term>, g: Box<Term>, b: Box<Term>) -> Self{
+        Lambda{parameter: p, guard: g, body: b, product: (), index: 0, stuff: ()}
+    }
+}
+
+trait RootType<T>{
+    fn native(&self) -> &T;
+}
+impl RootType<String> for EString{
+    fn native(&self) -> &String { &self.0 }
+}
+impl RootType<isize> for Integer{
+    fn native(&self) -> &isize { &self.0 }
+}
+
+trait Term{
+    fn to_string(&self) -> String { "This is a Term.".to_string() }
+}
+
+impl Term for EString{
+    fn to_string(&self) -> String { "This is an EString".to_string() }
+}
+
+impl Term for Integer{
+    fn to_string(&self) -> String {"This is an Integer".to_string() }
+}
+
+impl Term for Lambda{
+    fn to_string(&self) -> String {"This is a Lambda.".to_string() }
+}
+
+#[test]
+fn term_type_check_test() -> (){
+    let estring = EString("Test Lambda Body".to_string());
+    let estring2 = EString("Test native".to_string());
+    let integer = Integer::new(3);
+    let i2 = Integer::new(5);
+    let lambda = Lambda::new(Box::new(estring), Box::new(integer),
+                 Box::new(i2));
+    // Uncomment the following line to see the term type checker assist in action
+    // stringterm = integerterm;
+
+    assert!(estring2.native().to_string() == "Test native".to_string() );
+}
