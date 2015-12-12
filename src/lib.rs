@@ -7,6 +7,8 @@
 //! ```
 //! The relision term rewriting library.
 //!
+//! Core library operations.
+//!
 //! # License
 //!
 //! Copyright (c) 2015 by Stacy Prowell.  All rights reserved.
@@ -26,6 +28,7 @@
 extern crate lazy_static;
 extern crate num;
 mod platform;
+mod repl;
 
 /// Get the name of the platform for which this version of relision was
 /// compiled.
