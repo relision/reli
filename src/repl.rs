@@ -1,3 +1,5 @@
+//! Implement the REPL.
+//!
 //! ```text
 //!           _ _     _
 //!  _ __ ___| (_)___(_) ___  _ __
@@ -6,8 +8,6 @@
 //! |_|  \___|_|_|___/_|\___/|_| |_|
 //! ```
 //! The relision term rewriting library.
-//!
-//! Implement the REPL.
 //!
 //! # License
 //!
@@ -21,15 +21,20 @@ extern crate linenoise;
 extern crate num;
 extern crate getopts;
 
-// The return result from a callback.
+/// The return result from a callback.  Errors are returned as a string in an `Err` result, while
+/// success is indicated by `Ok("".to_owned())`.
 pub type CallbackResult = Result<String, String>;
 
-// A callback is a function mapping a vector of strings to a return value.
+/// A callback is a function mapping a vector of strings to a return value.  The argument to the
+/// function is the vector of text arguments given at invocation.  The result indicates success or
+/// an error.
 pub type Callback = Box<Fn(Vec<&str>) -> CallbackResult>;
 
 /// Struct to hold a colon command definition.
 pub struct ColonCommand {
+    /// The name of the command, matched by first unique prefix.
     name: &'static str,
+    /// The action to perform when the command is detected.
     action: Callback,
 }
 

@@ -1,3 +1,5 @@
+//! Provide all platform-specific definitions.
+//!
 //! ```text
 //!           _ _     _
 //!  _ __ ___| (_)___(_) ___  _ __
@@ -6,8 +8,6 @@
 //! |_|  \___|_|_|___/_|\___/|_| |_|
 //! ```
 //! The relision term rewriting library.
-//!
-//! Provide all platform-specific definitions.
 //!
 //! # License
 //!

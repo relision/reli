@@ -1,3 +1,5 @@
+//! Command line access to the REPL.
+//!
 //! ```text
 //!           _ _     _
 //!  _ __ ___| (_)___(_) ___  _ __
@@ -6,8 +8,6 @@
 //! |_|  \___|_|_|___/_|\___/|_| |_|
 //! ```
 //! The relision term rewriting library.
-//!
-//! Implement the REPL.
 //!
 //! # License
 //!
@@ -61,10 +61,11 @@ fn main() {
 
     // Print the banner.
     repl::banner();
-    println!("Running on {}.", relision::get_platform());
-    println!("Configuration stored at: {}.", relision::get_config_dir());
+    println!("Running on {}.", relision::platform::get_platform());
+    let config_dir = relision::platform::get_config_dir();
+    println!("Configuration stored at: {}.", config_dir);
 
     // Now run the REPL.
-    let history_filename = relision::get_config_dir() + ("/repl.history");
+    let history_filename = config_dir + ("/repl.history");
     repl::backed_repl(&history_filename);
 }

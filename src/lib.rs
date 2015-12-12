@@ -1,4 +1,6 @@
-//!```text
+//! Core library operations.
+//!
+//! ```text
 //!           _ _     _
 //!  _ __ ___| (_)___(_) ___  _ __
 //! | '__/ _ \ | / __| |/ _ \| '_ \
@@ -6,8 +8,6 @@
 //! |_|  \___|_|_|___/_|\___/|_| |_|
 //! ```
 //! The relision term rewriting library.
-//!
-//! Core library operations.
 //!
 //! # License
 //!
@@ -27,18 +27,5 @@
 #[macro_use]
 extern crate lazy_static;
 extern crate num;
-mod platform;
-mod repl;
-
-/// Get the name of the platform for which this version of relision was
-/// compiled.
-pub fn get_platform() -> String {
-	platform::get_platform().to_string()
-}
-
-/// Get the path to the configuration directory where relision should store
-/// its persistent state, configuration information, etc.  This should be
-/// a readable and writeable folder.
-pub fn get_config_dir() -> String {
-	platform::get_config_dir().to_string()
-}
+pub mod platform;
+pub mod repl;
