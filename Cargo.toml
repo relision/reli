@@ -25,6 +25,7 @@ The relision term rewriter.
 	name = "relision"
 
 [[bin]]
-	name = "relision"
+	# Build the REPL.
+	name = "repl"
 	path = "src/main.rs"
 	doc = false

@@ -1,3 +1,5 @@
+//! Provide all platform-specific definitions.
+//!
 //! ```text
 //!           _ _     _
 //!  _ __ ___| (_)___(_) ___  _ __
@@ -20,7 +22,7 @@ use std::env;
 /// Get the name of the platform for which this version of relision was
 /// compiled.
 pub fn get_platform() -> &'static str {
-	if cfg!(target_os = "macos") {
+    if cfg!(target_os = "macos") {
         "macos"
     } else if cfg!(target_os = "linux") {
         "linux"
@@ -70,7 +72,7 @@ pub fn get_platform() -> &'static str {
 ///   * `$XDG_CONFIG_HOME/relision`
 ///   * `$HOME/.config/relision`
 pub fn get_config_dir() -> String {
-	if cfg!(target_os = "macos") {
+    if cfg!(target_os = "macos") {
         match env::home_dir() {
             Some(value) => {
                 let mut result = value;
@@ -78,70 +80,82 @@ pub fn get_config_dir() -> String {
                 result.push("Application Support");
                 result.push("relision");
                 match result.into_os_string().into_string() {
-                    Ok(rawpath) => { return rawpath; },
+                    Ok(rawpath) => {
+                        return rawpath;
+                    }
                     Err(_) => {}
                 };
-            },
+            }
             None => {}
         };
         panic!("Cannot locate configuration files for relision.  Please set HOME.");
     } else if cfg!(target_os = "windows") {
         match env::var_os("LOCALAPPDATA") {
-			Some(value) => {
-				match value.into_string() {
-					Ok(prefix) => { return prefix + "\\relision"; },
-					Err(_) => {}
-				};
-			},
-			None => {}
-		};
-		match env::var_os("USERPROFILE") {
-			Some(value) => {
-				match value.into_string() {
-					Ok(prefix) => { return prefix + "\\AppData\\Local\\relision"; },
-					Err(_) => ()
-				};
-			},
-			None => {}
-		};
-		match env::home_dir() {
-			Some(value) => {
-				let mut result = value;
-				result.push("AppData");
-				result.push("Local");
-				result.push("relision");
-				match result.into_os_string().into_string() {
-					Ok(res) => { return res; },
-					Err(_) => {}
-				};
-			},
-			None => {}
-		};
-		panic!("Cannot locate configuration files for relision.  Please set HOME.");
+            Some(value) => {
+                match value.into_string() {
+                    Ok(prefix) => {
+                        return prefix + "\\relision";
+                    }
+                    Err(_) => {}
+                };
+            }
+            None => {}
+        };
+        match env::var_os("USERPROFILE") {
+            Some(value) => {
+                match value.into_string() {
+                    Ok(prefix) => {
+                        return prefix + "\\AppData\\Local\\relision";
+                    }
+                    Err(_) => (),
+                };
+            }
+            None => {}
+        };
+        match env::home_dir() {
+            Some(value) => {
+                let mut result = value;
+                result.push("AppData");
+                result.push("Local");
+                result.push("relision");
+                match result.into_os_string().into_string() {
+                    Ok(res) => {
+                        return res;
+                    }
+                    Err(_) => {}
+                };
+            }
+            None => {}
+        };
+        panic!("Cannot locate configuration files for relision.  Please set HOME.");
     } else {
         match env::var_os("XDG_CONFIG_HOME") {
-			Some(value) => {
-				let mut result = value;
-				result.push("/relision");
-				match result.into_string() {
-					Ok(rawpath) => { return rawpath; },
-					Err(_) => {}
-				};
-			},
-			None => {}
-		};
-		match env::home_dir() {
-			Some(value) => {
-				let mut result = value;
-				result.push(".config");
-				result.push("relision");
-				match result.into_os_string().into_string() {
-					Ok(rawpath) => { return rawpath; },
-					Err(_) => {}
-				};
-			},
-			None => {}
-		};
-		panic!("Cannot locate configuration files for relision.  Please set HOME.");
+            Some(value) => {
+                let mut result = value;
+                result.push("/relision");
+                match result.into_string() {
+                    Ok(rawpath) => {
+                        return rawpath;
+                    }
+                    Err(_) => {}
+                };
+            }
+            None => {}
+        };
+        match env::home_dir() {
+            Some(value) => {
+                let mut result = value;
+                result.push(".config");
+                result.push("relision");
+                match result.into_os_string().into_string() {
+                    Ok(rawpath) => {
+                        return rawpath;
+                    }
+                    Err(_) => {}
+                };
+            }
+            None => {}
+        };
+        panic!("Cannot locate configuration files for relision.  Please set HOME.");
     }
 }
