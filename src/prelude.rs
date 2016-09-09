@@ -1,4 +1,4 @@
-//! Define terms.
+//! Prelude for the relision library.
 //!
 //! ```text
 //!           _ _     _
@@ -17,11 +17,4 @@
 //! that is part of this distribution.  This file may not be copied,
 //! modified, or distributed except according to those terms.
 
-mod terms;
-mod termfactory;
-mod util;
-mod eli_writer;
-pub use self::terms::Term;
-pub use self::termfactory::TermFactory;
-pub use self::util::TermWriter;
-pub use self::eli_writer::EliWriter;
+// Nothing is here just yet.

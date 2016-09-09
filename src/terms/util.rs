@@ -1,4 +1,4 @@
-//! Define terms.
+//! Utility definitions for terms.
 //!
 //! ```text
 //!           _ _     _
@@ -17,11 +17,16 @@
 //! that is part of this distribution.  This file may not be copied,
 //! modified, or distributed except according to those terms.
 
-mod terms;
-mod termfactory;
-mod util;
-mod eli_writer;
-pub use self::terms::Term;
-pub use self::termfactory::TermFactory;
-pub use self::util::TermWriter;
-pub use self::eli_writer::EliWriter;
+use std::fmt;
+use std::sync::Arc;
+use super::terms::*;
+use super::termfactory::TermFactory;
+
+/// Write a term.
+pub trait TermWriter {
+    /// Make a new instance.
+    fn new() -> Self;
+
+    /// Write a term to the given formatter.
+    fn write(&self, form: &mut fmt::Formatter, fact: &TermFactory, term: &Arc<Term>) -> fmt::Result;
+}

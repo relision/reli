@@ -17,13 +17,14 @@
 //! that is part of this distribution.  This file may not be copied,
 //! modified, or distributed except according to those terms.
 
-extern crate relision;
-extern crate getopts;
+extern crate relision;      // Get the relision crate (the library).
+extern crate getopts;       // Use an external crate to process command line options.
+
 use getopts::Options;
 use std::env;
 
 // Get the module implementing the REPL functions.
-mod repl;
+use relision::repl;
 
 /// Print the command line help.  First print the prototype for using the
 /// command, and then print help about using the switches.
@@ -36,6 +37,26 @@ fn print_usage(progname: &str, switches: Options) {
 
 /// Entry point when run from the prompt.
 fn main() {
+    // use std::sync::Arc;
+    // use relision::terms::Term;
+    use relision::terms::TermFactory;
+    use relision::terms::{TermWriter, EliWriter};
+    let fact = TermFactory::new();
+    let _eli = EliWriter::new();
+    let t = fact.get_root();
+    println!("{}\n    {:?}", t, t);
+    let u = fact.new_string("Mister Pickles".to_string());
+    println!("{}\n    {:?}", u, u);
+    let v = fact.new_variable(&fact.get_symbol(), "vivian".to_string(), &fact.new_boolean(true));
+    println!("{}\n    {:?}", v, v);
+    let m = fact.new_static_map(&v, &u);
+    println!("{}\n    {:?}", m, m);
+    let p = fact.new_static_product(&fact.get_string(), &fact.get_symbol());
+    println!("{}\n    {:?}", p, p);
+    let l = fact.new_lambda(&v, &m, &fact.new_boolean(true));
+    println!("{}\n    {:?}", l, l);
+    println!("{}\n    {:?}", fact.get_type(&l), fact.get_type(&l));
+
     // Get the command line arguments.
     let args: Vec<String> = env::args().collect();
     let me = args[0].clone();
