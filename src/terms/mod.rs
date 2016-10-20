@@ -22,6 +22,7 @@ mod termfactory;
 mod util;
 mod eli_writer;
 mod universe;
+pub mod locus;
 pub use self::terms::Term;
 pub use self::termfactory::TermFactory;
 pub use self::util::TermWriter;

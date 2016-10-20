@@ -37,6 +37,16 @@ fn print_usage(progname: &str, switches: Options) {
 
 /// Entry point when run from the prompt.
 fn main() {
+    // Go and get the locus stuff.
+    use relision::terms::locus::Locus;
+    let locus1 = Locus::Internal;
+    let locus2 = Locus::Console(9, 21);
+    let locus3 = Locus::File("brenda.eli".to_string(), 9, 21);
+    let locus4 = Locus::File("brenda.eli".to_string(), 9, 21);
+    println!("locus1: {}\nlocus2: {}\nlocus3: {}\nlocus4: {}\n", locus1, locus2, locus3, locus4);
+    println!("{} == {} -> {}", locus3, locus4, locus3 == locus4);
+    println!("{} == {} -> {}", locus2, locus3, locus2 == locus3);
+
     // use std::sync::Arc;
     // use relision::terms::Term;
     use relision::terms::TermFactory;
