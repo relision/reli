@@ -17,6 +17,7 @@
 //! that is part of this distribution.  This file may not be copied,
 //! modified, or distributed except according to those terms.
 
+// This module depends on the terms module.
 use super::terms::*;
 use std::sync::Arc;
 use std::collections::HashMap;

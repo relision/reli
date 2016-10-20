@@ -21,6 +21,14 @@ extern crate lazy_static;
 ///   - If the term is being created as part of an internal process (such as
 ///     the root type) or otherwise has no associated location, then get the
 ///     internal location via `Loc::get_internal()`.
+// #[derive(Debug)]
+// pub enum Locus2 {
+// 	Internal,
+// 	Console(line: u32, column: u32),
+// 	File(name: String, line: u32, column: u32),
+// }
+
+
 #[derive(Debug)]
 pub struct Locus {
 	source: String,

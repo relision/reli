@@ -19,12 +19,13 @@
 
 use std::fmt;
 use std::sync::Arc;
+// This module depends on the term module and on the term writer module.
 use super::terms::*;
 use super::util::TermWriter;
 use super::termfactory::TermFactory;
 use std::ops::Deref;
 
-// Write a term in relision form.
+/// Write a term in relision form.
 pub struct EliWriter {}
 
 impl TermWriter for EliWriter {

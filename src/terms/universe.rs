@@ -1,4 +1,4 @@
-//! Define terms.
+//! Implements a term universe.
 //!
 //! ```text
 //!           _ _     _
@@ -17,12 +17,6 @@
 //! that is part of this distribution.  This file may not be copied,
 //! modified, or distributed except according to those terms.
 
-mod terms;
-mod termfactory;
-mod util;
-mod eli_writer;
-mod universe;
-pub use self::terms::Term;
-pub use self::termfactory::TermFactory;
-pub use self::util::TermWriter;
-pub use self::eli_writer::EliWriter;
+// A term universe contains everything that is needed to operate with terms.
+// This includes the terms, factories, and methods for writing and reading
+// them.
