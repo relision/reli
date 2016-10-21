@@ -21,6 +21,7 @@
 use super::terms::*;
 use std::sync::Arc;
 use std::collections::HashMap;
+use terms::locus::Locus;
 
 /// The term factory.
 pub struct TermFactory {
@@ -77,6 +78,7 @@ pub struct TermFactory {
 macro_rules! nrt {
     ($typ: expr, $name: expr) => {
         Arc::new(Term::SymbolLiteral {
+            locus: Locus::Internal,
             typ: $typ.clone(),
             value: $name
         })
@@ -88,7 +90,7 @@ impl TermFactory {
     pub fn new() -> Self {
         let root = Arc::new(Term::Root);
         let the_boolean = Arc::new(Term::SymbolLiteral {
-            typ: root.clone(), value: "BOOLEAN".to_string()
+            locus: Locus::Internal, typ: root.clone(), value: "BOOLEAN".to_string()
         });
         let mut fact = TermFactory {
             // Initialize the root terms.
@@ -107,8 +109,10 @@ impl TermFactory {
             the_properties: nrt!(root, "PROPERTIES".to_string()),
 
             // Initialize the constants.
-            is_true: Arc::new(Term::BooleanLiteral{ typ: the_boolean.clone(), value: true}),
-            is_false: Arc::new(Term::BooleanLiteral{ typ: the_boolean.clone(), value: false}),
+            is_true: Arc::new(Term::BooleanLiteral{
+                locus: Locus::Internal, typ: the_boolean.clone(), value: true}),
+            is_false: Arc::new(Term::BooleanLiteral{
+                locus: Locus::Internal, typ: the_boolean.clone(), value: false}),
 
             // Initialize the term storage.
             named_terms: HashMap::new(),
@@ -154,8 +158,8 @@ impl TermFactory {
     }
 
     /// Make a new string instance.
-    pub fn new_string(&self, value: String) -> Arc<Term> {
-        Arc::new(Term::StringLiteral{ typ: self.the_string.clone(), value: value })
+    pub fn new_string(&self, locus: Locus, value: String, typ: Arc<Term>) -> Arc<Term> {
+        Arc::new(Term::StringLiteral{ locus: locus, typ: typ.clone(), value: value })
     }
 
     /// Get the well-known symbol type.
@@ -164,8 +168,8 @@ impl TermFactory {
     }
 
     /// Make a new symbol instance.
-    pub fn new_symbol(&self, value: String) -> Arc<Term> {
-        Arc::new(Term::SymbolLiteral{ typ: self.the_symbol.clone(), value: value })
+    pub fn new_symbol(&self, locus: Locus, value: String, typ: Arc<Term>) -> Arc<Term> {
+        Arc::new(Term::SymbolLiteral{ locus: locus, typ: typ.clone(), value: value })
     }
 
     /// Get the well-known Boolean type.
@@ -180,9 +184,11 @@ impl TermFactory {
     }
 
     /// Make a new variable.
-    pub fn new_variable(&self, typ: &Arc<Term>, name: String, guard: &Arc<Term>) -> Arc<Term> {
+    pub fn new_variable(&self, locus: Locus, typ: &Arc<Term>, name: String,
+        guard: &Arc<Term>) -> Arc<Term> {
         Arc::new(
             Term::Variable {
+                locus: locus,
                 typ: typ.clone(),
                 name: name,
                 guard: guard.clone(),
@@ -191,9 +197,11 @@ impl TermFactory {
     }
 
     /// Make a new static map.
-    pub fn new_static_map(&self, domain: &Arc<Term>, codomain: &Arc<Term>) -> Arc<Term> {
+    pub fn new_static_map(&self, locus: Locus, domain: &Arc<Term>,
+        codomain: &Arc<Term>) -> Arc<Term> {
         Arc::new(
             Term::StaticMap {
+                locus: locus,
                 domain: domain.clone(),
                 codomain: codomain.clone(),
             }
@@ -201,9 +209,10 @@ impl TermFactory {
     }
 
     /// Make a new static product.
-    pub fn new_static_product(&self, lhs: &Arc<Term>, rhs: &Arc<Term>) -> Arc<Term> {
+    pub fn new_static_product(&self, locus: Locus, lhs: &Arc<Term>, rhs: &Arc<Term>) -> Arc<Term> {
         Arc::new(
             Term::StaticProduct {
+                locus: locus,
                 lhs: lhs.clone(),
                 rhs: rhs.clone(),
             }
@@ -211,9 +220,11 @@ impl TermFactory {
     }
 
     /// Make a new lambda.
-    pub fn new_lambda(&self, param: &Arc<Term>, body: &Arc<Term>, guard: &Arc<Term>) -> Arc<Term> {
+    pub fn new_lambda(&self, locus: Locus, param: &Arc<Term>, body: &Arc<Term>,
+        guard: &Arc<Term>) -> Arc<Term> {
         Arc::new(
             Term::Lambda {
+                locus: locus,
                 param: param.clone(),
                 body: body.clone(),
                 guard: guard.clone(),
@@ -225,18 +236,30 @@ impl TermFactory {
     pub fn get_type(&self, term: &Arc<Term>) -> Arc<Term> {
         match **term {
             Term::Root => Arc::new(Term::Root),
-            Term::SymbolLiteral { ref typ, .. } => typ.clone(),
-            Term::StringLiteral { ref typ, .. } => typ.clone(),
-            Term::BooleanLiteral { ref typ, .. } => typ.clone(),
-            Term::Variable { ref typ, .. } => typ.clone(),
+            Term::SymbolLiteral { ref locus, ref typ, .. } => typ.clone(),
+            Term::StringLiteral { ref locus, ref typ, .. } => typ.clone(),
+            Term::BooleanLiteral { ref locus, ref typ, .. } => typ.clone(),
+            Term::Variable { ref locus, ref typ, .. } => typ.clone(),
             Term::StaticMap { .. } => self.the_map.clone(),
             Term::StaticProduct { .. } => self.the_product.clone(),
-            Term::Lambda { ref param, ref body, .. } => {
+            Term::Lambda { ref locus, ref param, ref body, .. } => {
                 let lhs = self.get_type(param);
                 let rhs = self.get_type(body);
-                self.new_static_product(&lhs, &rhs)
+                self.new_static_product(Locus::Internal, &lhs, &rhs)
             }
         }
     }
 
+    pub fn get_locus(&self, term: &Arc<Term>) -> Arc<Locus> {
+        match **term {
+            Term::Root => Arc::new(Locus::Internal),
+            Term::SymbolLiteral { ref locus, .. } => locus.clone(),
+            Term::StringLiteral { ref locus, .. } => locus.clone(),
+            Term::BooleanLiteral { ref locus, .. } => locus.clone(),
+            Term::Variable { ref locus, .. } => locus.clone(),
+            Term::StaticMap { ref locus, .. } => locus.clone(),
+            Term::StaticProduct { ref locus, .. } => locus.clone(),
+            Term::Lambda { ref locus, .. } => locus.clone(),
+        }
+    }
 }

@@ -10,7 +10,7 @@
 /// Every term can have an associated location, which tells where the term
 /// was originally declared.  This can be *internal*, or it can be from a
 /// *file*, or it could be from an interactive *console* session.
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, PartialOrd)]
 pub enum Locus {
 	/// The internal locus applies where a term is created not as the result of
 	/// a file or console input line.

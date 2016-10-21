@@ -18,15 +18,19 @@
 //! modified, or distributed except according to those terms.
 
 use std::sync::Arc;
+use terms::locus::Locus;
 
 /// Define the different kinds of terms.
 #[derive(Debug, PartialEq, PartialOrd)]
 pub enum Term {
-    /// The root term is the term that is its own type.
+    /// The root term is the term that is its own type.  It is eternal,
+    /// and its locus is "internal."
     Root,
 
     /// Define the symbol literal term.
     SymbolLiteral {
+        /// The locus.
+        locus: Locus,
         /// The type.
         typ: Arc<Term>,
         /// The value.
@@ -35,6 +39,8 @@ pub enum Term {
 
     /// Define the string literal term.
     StringLiteral {
+        /// The locus.
+        locus: Locus,
         /// The type.
         typ: Arc<Term>,
         /// The value.
@@ -43,6 +49,8 @@ pub enum Term {
 
     /// Define the Boolean literal term.
     BooleanLiteral {
+        /// The locus.
+        locus: Locus,
         /// The type.
         typ: Arc<Term>,
         /// The value.
@@ -51,6 +59,8 @@ pub enum Term {
 
     /// Define the variable term.
     Variable {
+        /// The locus.
+        locus: Locus,
         /// The type.
         typ: Arc<Term>,
         /// The name.
@@ -61,6 +71,8 @@ pub enum Term {
 
     /// Define the static map.
     StaticMap {
+        /// The locus.
+        locus: Locus,
         /// The domain.
         domain: Arc<Term>,
         /// The co-domain.
@@ -69,6 +81,8 @@ pub enum Term {
 
     /// Define the static product.
     StaticProduct {
+        /// The locus.
+        locus: Locus,
         /// The left-hand term.
         lhs: Arc<Term>,
         /// The right-hand term.
@@ -77,6 +91,8 @@ pub enum Term {
 
     /// Define the lambda term.
     Lambda {
+        /// The locus.
+        locus: Locus,
         /// The lambda pattern.
         param: Arc<Term>,
         /// The lambda body.
@@ -95,26 +111,26 @@ impl fmt::Display for Term {
     fn fmt(&self, form: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             Term::Root => write!(form, "^ROOT"),
-            Term::SymbolLiteral { ref typ, ref value } => {
-                write!(form, "{}: {}", value, typ)
+            Term::SymbolLiteral { ref locus, ref typ, ref value } => {
+                write!(form, "{}: {} /* {} */", value, typ, locus)
             },
-            Term::StringLiteral { ref typ, ref value } => {
-                write!(form, "{:?}: {}", value, typ)
+            Term::StringLiteral { ref locus, ref typ, ref value } => {
+                write!(form, "{:?}: {} /* {} */", value, typ, locus)
             },
-            Term::BooleanLiteral { ref typ, ref value } => {
-                write!(form, "{:?}: {}", value, typ)
+            Term::BooleanLiteral { ref locus, ref typ, ref value } => {
+                write!(form, "{:?}: {} /* {} */", value, typ, locus)
             },
-            Term::Variable { ref typ, ref name, ref guard } => {
-                write!(form, "${}{{{}}}: {}", name, guard, typ)
+            Term::Variable { ref locus, ref typ, ref name, ref guard } => {
+                write!(form, "${}{{{}}}: {} /* {} */", name, guard, typ, locus)
             },
-            Term::StaticMap { ref domain, ref codomain } => {
-                write!(form, "{} => {}", domain, codomain)
+            Term::StaticMap { ref locus, ref domain, ref codomain } => {
+                write!(form, "{} => {} /* {} */", domain, codomain, locus)
             },
-            Term::StaticProduct { ref lhs, ref rhs } => {
-                write!(form, "{} * {}", lhs, rhs)
+            Term::StaticProduct { ref locus, ref lhs, ref rhs } => {
+                write!(form, "{} * {} /* {} */", lhs, rhs, locus)
             },
-            Term::Lambda { ref param, ref body, ref guard } => {
-                write!(form, "{} ->{{{}}} {}", param, guard, body)
+            Term::Lambda { ref locus, ref param, ref body, ref guard } => {
+                write!(form, "{} ->{{{}}} {} /* {} */", param, guard, body, locus)
             },
         }
     }

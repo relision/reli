@@ -41,7 +41,7 @@ impl TermWriter for EliWriter {
             // Print a symbol literal.  If this is a known root type, just print it.
             // If the name is the same as a known root type, then print the type.
             // Otherwise only print the type if it is not SYMBOL.
-            &Term::SymbolLiteral { ref typ, ref value } => {
+            &Term::SymbolLiteral { ref locus, ref typ, ref value } => {
                 // A symbol literal might denote a known term, or it might be a
                 // simple symbol.
                 if fact.is_named_root_term(value) {
@@ -66,27 +66,27 @@ impl TermWriter for EliWriter {
                 }
             },
 
-            &Term::StringLiteral { ref typ, ref value } => {
+            &Term::StringLiteral { ref locus, ref typ, ref value } => {
                 write!(form, "{:?}: {}", value, typ)
             },
 
-            &Term::BooleanLiteral { ref typ, ref value } => {
+            &Term::BooleanLiteral { ref locus, ref typ, ref value } => {
                 write!(form, "{:?}: {}", value, typ)
             },
 
-            &Term::Variable { ref typ, ref name, ref guard } => {
+            &Term::Variable { ref locus, ref typ, ref name, ref guard } => {
                 write!(form, "${}{{{}}}: {}", name, guard, typ)
             },
 
-            &Term::StaticMap { ref domain, ref codomain } => {
+            &Term::StaticMap { ref locus, ref domain, ref codomain } => {
                 write!(form, "{} => {}", domain, codomain)
             },
 
-            &Term::StaticProduct { ref lhs, ref rhs } => {
+            &Term::StaticProduct { ref locus, ref lhs, ref rhs } => {
                 write!(form, "{} * {}", lhs, rhs)
             },
 
-            &Term::Lambda { ref param, ref body, ref guard } => {
+            &Term::Lambda { ref locus, ref param, ref body, ref guard } => {
                 write!(form, "{} ->{{{}}} {}", param, guard, body)
             },
         }
