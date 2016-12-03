@@ -33,9 +33,9 @@ pub type Callback = Box<Fn(Vec<&str>) -> CallbackResult>;
 /// Struct to hold a colon command definition.
 pub struct ColonCommand {
     /// The name of the command, matched by first unique prefix.
-    name: &'static str,
+    pub name: &'static str,
     /// The action to perform when the command is detected.
-    action: Callback,
+    pub action: Callback,
 }
 
 /// Obtain the supported colon commands, each mapped to a closure that
@@ -111,6 +111,8 @@ pub fn repl(commands: Vec<ColonCommand>) {
                 // must be unambiguous.
                 if input.starts_with(":") {
                     // Found a potential colon command, so now process it.
+                    // TODO Right now we split at spaces, but once the parser is ready we should
+                    // use it, because this might split within strings, etc.
                     let arguments: Vec<&str> = input.split(' ').collect();
                     let mut possible: Option<&ColonCommand> = None;
                     let mut found = false;
