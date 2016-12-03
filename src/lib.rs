@@ -1,4 +1,4 @@
-//! Core library operations.
+//! The relision library.
 //!
 //! ```text
 //!           _ _     _
@@ -24,8 +24,17 @@
 	html_root_url = "https://github.com/relision")]
 #![warn(missing_docs)]
 
+// Use a crate for defining single-initialization complex static data.
 #[macro_use]
 extern crate lazy_static;
+
+// Use a crate for arbitrary precision integers.
+#[macro_use]
 extern crate num;
-pub mod platform;
-pub mod repl;
+
+// Modules (namespaces) provided by this library are all defined here.
+pub mod util;			// Generic utility functions.
+pub mod prelude;		// Common definitions for programs that want to use relision.
+pub mod platform;		// Platform-specific functions and definitions.
+pub mod repl;			// Implementation of the REPL for relision.
+pub mod terms;			// Implementation of terms.
