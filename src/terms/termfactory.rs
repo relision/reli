@@ -27,7 +27,9 @@ use terms::locus::Locus;
 pub struct TermFactory {
 
     /*
-     * The known root terms.
+     * The known root terms.  We just want one instance of each, and so this struct holds
+     * the instances.  This avoids the lookup cost when constructing new instances with the
+     * default type.
      */
 
     /// Root.
@@ -37,28 +39,36 @@ pub struct TermFactory {
     /// STRING type.
     the_string: Arc<Term>,
     /// INTEGER type.
+    #[allow(dead_code)]
     the_integer: Arc<Term>,
     /// FLOAT type.
+    #[allow(dead_code)]
     the_float: Arc<Term>,
     /// BIT_STRING type.
+    #[allow(dead_code)]
     the_bit_string: Arc<Term>,
     /// BOOLEAN type.
     the_boolean: Arc<Term>,
     /// ANY type.
+    #[allow(dead_code)]
     the_any: Arc<Term>,
     /// NONE type.
+    #[allow(dead_code)]
     the_none: Arc<Term>,
     /// MAP type.
     the_map: Arc<Term>,
     /// PRODUCT type.
     the_product: Arc<Term>,
     /// SPECIAL_FORM type.
+    #[allow(dead_code)]
     the_special_form: Arc<Term>,
     /// PROPERTIES type.
+    #[allow(dead_code)]
     the_properties: Arc<Term>,
 
     /*
-     * Well-known constants.
+     * Well-known constants.  We just want one instance of each, and so this struct holds
+     * the instances.
      */
 
     /// The Boolean true.
@@ -67,20 +77,20 @@ pub struct TermFactory {
     is_false: Arc<Term>,
 
     /*
-     * Stored information.
+     * Store a mapping from the name of a named root term to the root term itself.
      */
 
-    /// Well-known named root terms.
-    named_terms: HashMap<String, Arc<Term>>,
+    /// Map names to root terms.
+    named_terms: HashMap<String, Arc<Term>>
 }
 
-/// Local macro to create a new root type.
+/// Local macro to create a new root term.
 macro_rules! nrt {
     ($typ: expr, $name: expr) => {
         Arc::new(Term::SymbolLiteral {
-            locus: Locus::Internal,
-            typ: $typ.clone(),
-            value: $name
+            locus: Locus::Internal,         // Always internal.
+            typ: $typ.clone(),              // Clone the type so we can store it.
+            value: $name                    // The name of the root term.
         })
     }
 }
@@ -88,48 +98,68 @@ macro_rules! nrt {
 impl TermFactory {
     /// Construct and return a new term factory.
     pub fn new() -> Self {
+        // Make all the terms.
         let root = Arc::new(Term::Root);
-        let the_boolean = Arc::new(Term::SymbolLiteral {
-            locus: Locus::Internal, typ: root.clone(), value: "BOOLEAN".to_string()
-        });
-        let mut fact = TermFactory {
-            // Initialize the root terms.
-            the_root: root.clone(),
-            the_symbol: nrt!(root, "SYMBOL".to_string()),
-            the_string: nrt!(root, "STRING".to_string()),
-            the_integer: nrt!(root, "INTEGER".to_string()),
-            the_float: nrt!(root, "FLOAT".to_string()),
-            the_bit_string: nrt!(root, "BIT_STRING".to_string()),
-            the_boolean: the_boolean.clone(),
-            the_any: nrt!(root, "ANY".to_string()),
-            the_none: nrt!(root, "NONE".to_string()),
-            the_map: nrt!(root, "MAP".to_string()),
-            the_product: nrt!(root, "PRODUCT".to_string()),
-            the_special_form: nrt!(root, "SPECIAL_FORM".to_string()),
-            the_properties: nrt!(root, "PROPERTIES".to_string()),
+        let symbol = nrt!(root, "SYMBOL".to_string());
+        let string = nrt!(root, "STRING".to_string());
+        let integer = nrt!(root, "INTEGER".to_string());
+        let float = nrt!(root, "FLOAT".to_string());
+        let bit_string = nrt!(root, "BIT_STRING".to_string());
+        let boolean = nrt!(root, "BOOLEAN".to_string());
+        let any = nrt!(root, "ANY".to_string());
+        let none = nrt!(root, "NONE".to_string());
+        let map = nrt!(root, "MAP".to_string());
+        let product = nrt!(root, "PRODUCT".to_string());
+        let special_form = nrt!(root, "SPECIAL_FORM".to_string());
+        let properties = nrt!(root, "PROPERTIES".to_string());
 
-            // Initialize the constants.
+        // Make the hash map now.  We will store it in the term factory when we
+        // construct it.
+        let mut hmap = HashMap::new();
+        hmap.insert("ROOT".to_string(), root.clone());
+        hmap.insert("SYMBOL".to_string(), symbol.clone());
+        hmap.insert("STRING".to_string(), string.clone());
+        hmap.insert("INTEGER".to_string(), integer.clone());
+        hmap.insert("FLOAT".to_string(), float.clone());
+        hmap.insert("BIT_STRING".to_string(), bit_string.clone());
+        hmap.insert("BOOLEAN".to_string(), boolean.clone());
+        hmap.insert("ANY".to_string(), any.clone());
+        hmap.insert("NONE".to_string(), none.clone());
+        hmap.insert("MAP".to_string(), map.clone());
+        hmap.insert("PRODUCT".to_string(), product.clone());
+        hmap.insert("SPECIAL_FORM".to_string(), special_form.clone());
+        hmap.insert("PROPERTIES".to_string(), properties.clone());
+
+        // Create the term factory instance.  This initializes the root terms.
+        let fact = TermFactory {
+            // Initialize the Boolean constants.
             is_true: Arc::new(Term::BooleanLiteral{
-                locus: Locus::Internal, typ: the_boolean.clone(), value: true}),
+                locus: Locus::Internal, typ: boolean.clone(), value: true}),
             is_false: Arc::new(Term::BooleanLiteral{
-                locus: Locus::Internal, typ: the_boolean.clone(), value: false}),
+                locus: Locus::Internal, typ: boolean.clone(), value: false}),
 
-            // Initialize the term storage.
-            named_terms: HashMap::new(),
+            // Initialize the root terms.  Note that we clone the terms we have already
+            // created when storing them, since our copy will be deallocated when it goes
+            // out of scope.  Also, note that we built the clone for root into the macro.
+            the_root: root,
+            the_symbol: symbol,
+            the_string: string,
+            the_integer: integer,
+            the_float: float,
+            the_bit_string: bit_string,
+            the_boolean: boolean,
+            the_any: any,
+            the_none: none,
+            the_map: map,
+            the_product: product,
+            the_special_form: special_form,
+            the_properties: properties,
+
+            // Save the map.
+            named_terms: hmap
         };
-        fact.named_terms.insert("^ROOT".to_string(), fact.the_root.clone());
-        fact.named_terms.insert("SYMBOL".to_string(), fact.the_symbol.clone());
-        fact.named_terms.insert("STRING".to_string(), fact.the_string.clone());
-        fact.named_terms.insert("INTEGER".to_string(), fact.the_integer.clone());
-        fact.named_terms.insert("FLOAT".to_string(), fact.the_float.clone());
-        fact.named_terms.insert("BIT_STRING".to_string(), fact.the_bit_string.clone());
-        fact.named_terms.insert("BOOLEAN".to_string(), fact.the_boolean.clone());
-        fact.named_terms.insert("ANY".to_string(), fact.the_any.clone());
-        fact.named_terms.insert("NONE".to_string(), fact.the_none.clone());
-        fact.named_terms.insert("MAP".to_string(), fact.the_map.clone());
-        fact.named_terms.insert("PRODUCT".to_string(), fact.the_product.clone());
-        fact.named_terms.insert("SPECIAL_FORM".to_string(), fact.the_special_form.clone());
-        fact.named_terms.insert("PROPERTIES".to_string(), fact.the_properties.clone());
+
+        // The factory is done.
         fact
     }
 
@@ -152,13 +182,28 @@ impl TermFactory {
         self.the_root.clone()
     }
 
+    /// Get the any term.
+    pub fn get_any(&self) -> Arc<Term> {
+        self.the_any.clone()
+    }
+
+    /// Get the none term.
+    pub fn get_none(&self) -> Arc<Term> {
+        self.the_none.clone()
+    }
+
     /// Get the well-known string type.
     pub fn get_string(&self) -> Arc<Term> {
         self.the_string.clone()
     }
 
     /// Make a new string instance.
-    pub fn new_string(&self, locus: Locus, value: String, typ: Arc<Term>) -> Arc<Term> {
+    pub fn new_string(&self, locus: Locus, value: String) -> Arc<Term> {
+        Arc::new(Term::StringLiteral{ locus: locus, typ: self.the_string.clone(), value: value })
+    }
+
+    /// Make a typed string instance.
+    pub fn new_typed_string(&self, locus: Locus, value: String, typ: Arc<Term>) -> Arc<Term> {
         Arc::new(Term::StringLiteral{ locus: locus, typ: typ.clone(), value: value })
     }
 
@@ -168,7 +213,12 @@ impl TermFactory {
     }
 
     /// Make a new symbol instance.
-    pub fn new_symbol(&self, locus: Locus, value: String, typ: Arc<Term>) -> Arc<Term> {
+    pub fn new_symbol(&self, locus: Locus, value: String) -> Arc<Term> {
+        Arc::new(Term::SymbolLiteral{ locus: locus, typ: self.the_symbol.clone(), value: value })
+    }
+
+    /// Make a typed symbol instance.
+    pub fn new_typed_symbol(&self, locus: Locus, value: String, typ: Arc<Term>) -> Arc<Term> {
         Arc::new(Term::SymbolLiteral{ locus: locus, typ: typ.clone(), value: value })
     }
 
@@ -181,6 +231,11 @@ impl TermFactory {
     pub fn new_boolean(&self, value: bool) -> Arc<Term> {
         if value { self.is_true.clone() }
         else { self.is_false.clone() }
+    }
+
+    /// Make a typed Boolean instance.
+    pub fn new_typed_boolean(&self, locus: Locus, value: bool, typ: Arc<Term>) -> Arc<Term> {
+        Arc::new(Term::BooleanLiteral{ locus: locus, typ: typ.clone(), value: value })
     }
 
     /// Make a new variable.
@@ -236,13 +291,13 @@ impl TermFactory {
     pub fn get_type(&self, term: &Arc<Term>) -> Arc<Term> {
         match **term {
             Term::Root => Arc::new(Term::Root),
-            Term::SymbolLiteral { ref locus, ref typ, .. } => typ.clone(),
-            Term::StringLiteral { ref locus, ref typ, .. } => typ.clone(),
-            Term::BooleanLiteral { ref locus, ref typ, .. } => typ.clone(),
-            Term::Variable { ref locus, ref typ, .. } => typ.clone(),
+            Term::SymbolLiteral { ref typ, .. } => typ.clone(),
+            Term::StringLiteral { ref typ, .. } => typ.clone(),
+            Term::BooleanLiteral { ref typ, .. } => typ.clone(),
+            Term::Variable { ref typ, .. } => typ.clone(),
             Term::StaticMap { .. } => self.the_map.clone(),
             Term::StaticProduct { .. } => self.the_product.clone(),
-            Term::Lambda { ref locus, ref param, ref body, .. } => {
+            Term::Lambda { ref param, ref body, .. } => {
                 let lhs = self.get_type(param);
                 let rhs = self.get_type(body);
                 self.new_static_product(Locus::Internal, &lhs, &rhs)
@@ -250,16 +305,17 @@ impl TermFactory {
         }
     }
 
-    pub fn get_locus(&self, term: &Arc<Term>) -> Arc<Locus> {
+    /// Get the locus of the provided term.
+    pub fn get_locus(&self, term: &Arc<Term>) -> Locus {
         match **term {
-            Term::Root => Arc::new(Locus::Internal),
+            Term::Root => Locus::Internal.clone(),
             Term::SymbolLiteral { ref locus, .. } => locus.clone(),
             Term::StringLiteral { ref locus, .. } => locus.clone(),
             Term::BooleanLiteral { ref locus, .. } => locus.clone(),
             Term::Variable { ref locus, .. } => locus.clone(),
             Term::StaticMap { ref locus, .. } => locus.clone(),
             Term::StaticProduct { ref locus, .. } => locus.clone(),
-            Term::Lambda { ref locus, .. } => locus.clone(),
+            Term::Lambda { ref locus, .. } => locus.clone()
         }
     }
 }

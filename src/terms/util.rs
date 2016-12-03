@@ -17,7 +17,7 @@
 //! that is part of this distribution.  This file may not be copied,
 //! modified, or distributed except according to those terms.
 
-use std::fmt;
+use std::io;
 use std::sync::Arc;
 use super::terms::*;
 use super::termfactory::TermFactory;
@@ -27,6 +27,12 @@ pub trait TermWriter {
     /// Make a new instance.
     fn new() -> Self;
 
+    /// Print directly to standard out.
+    fn print(&self, fact: &TermFactory, term: &Arc<Term>);
+
+    /// Print directly to standard out.
+    fn println(&self, fact: &TermFactory, term: &Arc<Term>);
+
     /// Write a term to the given formatter.
-    fn write(&self, form: &mut fmt::Formatter, fact: &TermFactory, term: &Arc<Term>) -> fmt::Result;
+    fn write(&self, dest: &mut io::Write, fact: &TermFactory, term: &Arc<Term>) -> io::Result<()>;
 }

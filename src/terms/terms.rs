@@ -19,6 +19,7 @@
 
 use std::sync::Arc;
 use terms::locus::Locus;
+use util::escape;
 
 /// Define the different kinds of terms.
 #[derive(Debug, PartialEq, PartialOrd)]
@@ -104,33 +105,66 @@ pub enum Term {
 }
 
 impl Term {
+    // Methods that should be shared by all terms will go here.
 }
 
+fn with_locus(form: &mut fmt::Formatter, loc: &Locus) -> fmt::Result {
+    if *loc != Locus::Internal {
+        write!(form, " /* {} */", loc)
+    } else {
+        Ok(())
+    }
+}
+
+// Provide a default visualization for terms.  This is not quite the same as the ELI
+// format that will be defined elsewhere.
 use std::fmt;
 impl fmt::Display for Term {
     fn fmt(&self, form: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             Term::Root => write!(form, "^ROOT"),
             Term::SymbolLiteral { ref locus, ref typ, ref value } => {
-                write!(form, "{}: {} /* {} */", value, typ, locus)
+                let (escaped,fixed) = escape(value, '`');
+                if fixed {
+                    try!(write!(form, "`{}`", escaped));
+                } else {
+                    try!(write!(form, "{}", escaped));
+                }
+                if **typ != Term::Root {
+                    try!(write!(form, ": {}", typ));
+                }
+                with_locus(form, locus)
             },
             Term::StringLiteral { ref locus, ref typ, ref value } => {
-                write!(form, "{:?}: {} /* {} */", value, typ, locus)
+                let (escaped,_) = escape(value, '"');
+                try!(write!(form, "\"{}\": {}", escaped, typ));
+                with_locus(form, locus)
             },
             Term::BooleanLiteral { ref locus, ref typ, ref value } => {
-                write!(form, "{:?}: {} /* {} */", value, typ, locus)
+                try!(write!(form, "{:?}: {}", value, typ));
+                with_locus(form, locus)
             },
             Term::Variable { ref locus, ref typ, ref name, ref guard } => {
-                write!(form, "${}{{{}}}: {} /* {} */", name, guard, typ, locus)
+                let (escaped,fixed) = escape(name, '`');
+                if fixed {
+                    try!(write!(form, "$`{}`", escaped));
+                } else {
+                    try!(write!(form, "${}", escaped));
+                }
+                try!(write!(form, "{{{}}}: {}", guard, typ));
+                with_locus(form, locus)
             },
             Term::StaticMap { ref locus, ref domain, ref codomain } => {
-                write!(form, "{} => {} /* {} */", domain, codomain, locus)
+                try!(write!(form, "{} => {}", domain, codomain));
+                with_locus(form, locus)
             },
             Term::StaticProduct { ref locus, ref lhs, ref rhs } => {
-                write!(form, "{} * {} /* {} */", lhs, rhs, locus)
+                try!(write!(form, "{} * {}", lhs, rhs));
+                with_locus(form, locus)
             },
             Term::Lambda { ref locus, ref param, ref body, ref guard } => {
-                write!(form, "{} ->{{{}}} {} /* {} */", param, guard, body, locus)
+                try!(write!(form, "{} ->{{{}}} {}", param, guard, body));
+                with_locus(form, locus)
             },
         }
     }

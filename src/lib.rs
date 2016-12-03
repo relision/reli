@@ -33,6 +33,7 @@ extern crate lazy_static;
 extern crate num;
 
 // Modules (namespaces) provided by this library are all defined here.
+pub mod util;			// Generic utility functions.
 pub mod prelude;		// Common definitions for programs that want to use relision.
 pub mod platform;		// Platform-specific functions and definitions.
 pub mod repl;			// Implementation of the REPL for relision.

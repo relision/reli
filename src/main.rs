@@ -38,7 +38,7 @@ fn print_usage(progname: &str, switches: Options) {
 /// Entry point when run from the prompt.
 fn main() {
     // Go and get the locus stuff.
-    use relision::terms::locus::Locus;
+    use relision::terms::Locus;
     let locus1 = Locus::Internal;
     let locus2 = Locus::Console(9, 21);
     let locus3 = Locus::File("brenda.eli".to_string(), 9, 21);
@@ -52,20 +52,28 @@ fn main() {
     use relision::terms::TermFactory;
     use relision::terms::{TermWriter, EliWriter};
     let fact = TermFactory::new();
-    let _eli = EliWriter::new();
+    let eli = EliWriter::new();
     let t = fact.get_root();
     println!("{}\n    {:?}", t, t);
-    let u = fact.new_string("Mister Pickles".to_string());
+    let u = fact.new_string(Locus::Internal, "Mister \nPickles".to_string());
     println!("{}\n    {:?}", u, u);
-    let v = fact.new_variable(&fact.get_symbol(), "vivian".to_string(), &fact.new_boolean(true));
+    let v = fact.new_variable(Locus::Internal, &fact.get_any(), "viv\0ian".to_string(),
+        &fact.new_boolean(true));
     println!("{}\n    {:?}", v, v);
-    let m = fact.new_static_map(&v, &u);
+    let m = fact.new_static_map(Locus::Internal, &v, &u);
     println!("{}\n    {:?}", m, m);
-    let p = fact.new_static_product(&fact.get_string(), &fact.get_symbol());
+    let p = fact.new_static_product(Locus::Internal, &fact.get_string(), &fact.get_symbol());
     println!("{}\n    {:?}", p, p);
-    let l = fact.new_lambda(&v, &m, &fact.new_boolean(true));
+    let l = fact.new_lambda(Locus::Internal, &v, &m, &fact.new_boolean(true));
     println!("{}\n    {:?}", l, l);
     println!("{}\n    {:?}", fact.get_type(&l), fact.get_type(&l));
+    println!("");
+
+    // Now print using the ELI formatter.
+    let testy = fact.new_string(Locus::Internal, "|\u{a}\u{d}|\0|\t|\n|\r|\"|\'|?|\\|`|".to_string());
+    eli.println(&fact, &u);
+    eli.println(&fact, &testy);
+    eli.println(&fact, &l);
 
     // Get the command line arguments.
     let args: Vec<String> = env::args().collect();
